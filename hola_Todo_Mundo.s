@@ -10,7 +10,6 @@ msg_f: .ascii "f. Finalizar el Programa.\n\r"
 prompt_msg: .ascii "  Ingrese su opcion: \n\r"
 goodbye_msg: .ascii "¡Adios!\n\r"
 continue_msg: .ascii "Presione cualquier tecla excepto la f para continuar:\n\r"
-printCont:	.quad 0
 option_length: .quad option_end - option
 
 .section .bss
@@ -22,9 +21,6 @@ option_length: .quad option_end - option
 .global _start
 
 _start:
-    jmp print_menu
-
-print_menu:
     mov $1, %rax
     mov $1, %rdi
     mov $menu_msg, %rsi
@@ -164,7 +160,7 @@ input_continue:
 
 invalid_option:
     # Mensaje de opción inválida
-    jmp print_menu
+    jmp _start
 
 exit_program:
     # Mensaje de despedida
