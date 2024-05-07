@@ -11,9 +11,11 @@ prompt_msg: .ascii "  Ingrese su opcion: \n\r"
 goodbye_msg: .ascii "¡Adios!\n\r"
 continue_msg: .ascii "Presione cualquier tecla excepto la f para continuar:\n\r"
 printCont:	.quad 0
+option_length: .quad option_end - option
 
 .section .bss
-    .lcomm option, 2
+    option: .space 2
+    option_end:
     .lcomm custom_msg, 64
 
 .section .text
@@ -63,7 +65,7 @@ input_option:
     mov $0, %rax
     mov $0, %rdi
     lea option, %rsi
-    mov $2, %rdx
+    mov $option_length, %rdx
     syscall
     
     jmp select_option
@@ -153,7 +155,7 @@ input_continue:
     mov $0, %rax
     mov $0, %rdi
     lea option, %rsi
-    mov $2, %rdx
+    mov $option_length, %rdx
     syscall
 
     cmpb $'f', option
