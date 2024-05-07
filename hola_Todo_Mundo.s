@@ -10,6 +10,7 @@ msg_f: .ascii "f. Finalizar el Programa.\n\r"
 prompt_msg: .ascii "  Ingrese su opcion: \n\r"
 goodbye_msg: .ascii "¡Adios!\n\r"
 continue_msg: .ascii "Presione cualquier tecla excepto la f para continuar:\n\r"
+printCont:	.quad 0
 
 .section .bss
     .lcomm option, 2
@@ -109,26 +110,29 @@ print_independence_day:
     jmp ask_continue
 
 custom_message:
-
     mov $msg_e, %rsi
     mov $37, %rdx
     call print_message
-
 
     mov $prompt_msg, %rsi
     mov $22, %rdx
     call print_message
 
-
+    # Receive custom message
     mov $0, %rax
     mov $0, %rdi
-    mov custom_msg, %rsi
+    lea custom_msg, %rsi  
     mov $64, %rdx
     syscall
 
+     # Print debug: Check if custom message is correctly received
+    mov $1, %rax
+    mov $1, %rdi
+    lea custom_msg, %rsi 
+    mov $64, %rdx
+    syscall
 
-    call print_message
-
+    
     jmp ask_continue
 
 
@@ -170,5 +174,4 @@ exit_program:
     mov $60, %rax        
     xor %rdi, %rdi      
     syscall
-
 
